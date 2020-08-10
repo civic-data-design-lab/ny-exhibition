@@ -5,6 +5,7 @@ CURRENT_DIR = os.path.dirname(CURRENT_FILE)
 sys.path.append(CURRENT_DIR)
 sys.path.append(CURRENT_DIR+'/services/')
 sys.path.append(CURRENT_DIR+'/Server/')
+sys.path.append(CURRENT_DIR+'/venv/lib/python3.8/site-packages/')
 
 from Server import app
 import Server.views

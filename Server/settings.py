@@ -23,5 +23,5 @@ LOGGING_CURRENT_LEVEL = LOGGING_LEVEL[1]
 # -----------------------------------------------------------------------------
 DATABASE_PORT = 27017
 DATABASE_ADDRESS = 'localhost'
-DATABASE_ADMIN = 'dylan'
+DATABASE_ADMIN = 'newYork'
 DATABASE_PWD = '8e*VMKR9AkvGtM'
