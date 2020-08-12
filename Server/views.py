@@ -23,3 +23,11 @@ def response():
 @app.route('/')
 def home():
     return render_template('index.html', questions = questions)
+
+@app.route("/pull")
+def pull():
+    os.chdir('/home/ubuntu/ny-exhibition')
+    subprocess.run(['git', 'reset', '--hard', 'HEAD'])
+    response = subprocess.check_output(['git','pull'])
+    subprocess.run(['touch', 'htdocs/client.wsgi'])
+    return response
