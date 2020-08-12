@@ -6,11 +6,11 @@
     integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
   <style>
     body {
-      background: #FEAC5E;
+      background: #7F00FF;
       /* fallback for old browsers */
-      background: -webkit-linear-gradient(45deg, #4BC0C8, #C779D0, #FEAC5E);
+      background: -webkit-linear-gradient(45deg, #E100FF, #7F00FF);
       /* Chrome 10-25, Safari 5.1-6 */
-      background: linear-gradient(45deg, #4BC0C8, #C779D0, #FEAC5E);
+      background: linear-gradient(45deg, #E100FF, #7F00FF);
       /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     }
 
@@ -18,57 +18,80 @@
       min-height: 100%;
       max-width: 100%;
     }
+
+    #questions-container .tab-content {
+      padding: 25vh 0 15vh;
+    }
+
+    .question-label {
+      color: white;
+      font-size: 1.2em;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+
+    #zip-code-container .question-label {
+      font-size: 1em;
+    }
+
+    .question-input {
+      max-width: 600px;
+      min-width: 320px;
+      margin: auto;
+    }
+
+    .question-input button {
+      border-width: 2px;
+      font-weight: 700;
+      margin-left: 10px;
+      padding: 0 10px !important;
+    }
+
+    .list-group-item-action {
+      white-space: nowrap;
+    }
+
+    #zip-code-container {
+      padding: 10vh 0 0;
+    }
   </style>
 </head>
 
 <body>
-  <!-- The following code was just copied and pasted from Bootstrap's example with slight modification -->
+  <!-- The following markup was just copied and pasted from Bootstrap's documentation with modification -->
   <div class="container text-center">
-    <div class="row align-items-center" id="questions-container">
-      <div class="col-4">
-        <div class="list-group" id="list-tab" role="tablist">
-          <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list"
-            href="#list-home" role="tab" aria-controls="home">Question 1</a>
-          <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list"
-            href="#list-profile" role="tab" aria-controls="profile">Question 2</a>
-          <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list"
-            href="#list-messages" role="tab" aria-controls="messages">Question 3</a>
+    <div class="row flex-column align-items-center justify-content-center" id="questions-container">
+      <div class="tab-content" id="nav-tabContent">
+        {% for question in questions %}
+        <div class="tab-pane fade {{ 'active show' if loop.index == 1 }}" id="question-{{ loop.index }}" role="tabpanel"
+          aria-labelledby="list-question-{{ loop.index }}">
+          <form class="question" action="/response" method="POST">
+            <input type="hidden" value="{{ question }}" name="question" />
+            <input type="hidden" class="zip" name="zip_code" />
+            <div class="form-group">
+              <label for="response-question-{{ loop.index }}" class="col question-label">{{ question + '..' }}</label>
+              <div class="form-row question-input">
+                <input id="response-question-{{ loop.index }}" class="form-control col" name="response" required />
+                <button type="submit" class="btn btn-outline-light col-auto">Submit</button>
+              </div>
+            </div>
+          </form>
         </div>
+        {% endfor %}
       </div>
-      <div class="col-8">
-        <div class="tab-content" id="nav-tabContent">
-          <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
-            <form class="question" action="/response" method="POST">
-              <input type="hidden" value="What is your name?" name="question" />
-              <div class="form-row">
-                <label for="response-question-1" class="col-auto">What is your name?</label>
-                <input id="response-question-1" class="form-control col" name="response" />
-              </div>
-              <button type="submit" class="btn btn-primary my-3">Submit</button>
-            </form>
-          </div>
-          <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
-            <form class="question" action="/response" method="POST">
-              <input type="hidden" value="What is your age?" name="question" />
-              <div class="form-row">
-                <label for="response-question-2" class="col-auto">What is your age?</label>
-                <input id="response-question-2" class="form-control col" name="response" />
-              </div>
-              <button type="submit" class="btn btn-primary my-3">Submit</button>
-            </form>
-
-          </div>
-          <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">
-            <form class="question" action="/response" method="POST">
-              <input type="hidden" value="What is your height?" name="question" />
-              <div class="form-row">
-                <label for="response-question-3" class="col-auto">What is your height?</label>
-                <input id="response-question-3" class="form-control col" name="response" />
-              </div>
-              <button type="submit" class="btn btn-primary my-3">Submit</button>
-            </form>
-          </div>
-        </div>
+      <div class="list-group list-group-horizontal" id="list-tab" role="tablist">
+        {% for question in questions %}
+        <a class="list-group-item list-group-item-action {{ 'active' if loop.index == 1 }}"
+          id="list-question-{{ loop.index }}" data-toggle="list" href="#question-{{ loop.index }}" role="tab"
+          aria-controls="question-{{ loop.index }}">Question
+          {{ loop.index }}</a>
+        {% endfor %}
+      </div>
+      <div class="row align-items-center justify-content-center" id="zip-code-container">
+        <form id="zip-dummy">
+          <label for="zip-code" class="question-label small col-auto">Your ZIP Code</label>
+          <input type="number" class="form-control w-auto" id="zip-code" required />
+        </form>
       </div>
     </div>
   </div>
@@ -85,6 +108,17 @@
     $('.question').submit(function (e) {
       $(this).find('button').prop('disabled', true);
       e.preventDefault();
+      const zip_code = $('#zip-code').val();
+      console.log('the zip code', zip_code)
+
+      if (zip_code === '') {
+        console.log('hello');
+        $('#zip-dummy')[0].reportValidity();
+        $(this).find('button').prop('disabled', false);
+        return;
+      }
+
+      $('.zip').val(zip_code);
       console.log($(this).serialize());
       const action = $(this).attr('action');
       $.post(action, $(this).serialize()).done(function (response) {

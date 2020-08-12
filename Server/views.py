@@ -1,7 +1,7 @@
 from Server import app
 from flask import request, jsonify, render_template
 from Server import database
-
+from questions import questions
 
 @app.route('/api', methods=['GET'])
 def api():
@@ -17,9 +17,9 @@ def api():
 def response():
     response = request.form
     print(response)
-    id = database.add_response(response['question'], response['response'])
+    id = database.add_response(response['question'], response['response'], response['zip_code'])
     return id
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('index.html', questions = questions)
