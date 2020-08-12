@@ -2,6 +2,8 @@ from Server import app
 from flask import request, jsonify, render_template
 from Server import database
 from questions import questions
+import os
+import subprocess
 
 @app.route('/api', methods=['GET'])
 def api():
