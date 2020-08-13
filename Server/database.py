@@ -13,17 +13,17 @@ client = pymongo.MongoClient(
 db = client.exhibition
 
 
-# def get_items ():
-#     '''
-#     For the API
+def get_items ():
+    '''
+    For the API
 
-#     :return: List of all the items in student collection in database
-#     '''
-#     hashtags = db.rawTweets
-#     result = []
-#     for hashtag in hashtags.find():
-#         result.append(hashtag['hashtag'])
-#     return dumps(result)
+    :return: List of all the items in response collection in database
+    '''
+    responses = db.response
+    result = []
+    for response in responses.find():
+        result.append(response)
+    return dumps(result)
 
 def add_response (question, response, zip_code):
     collection = db.response
