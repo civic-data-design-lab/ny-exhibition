@@ -4,6 +4,7 @@ from Server import database
 from questions import questions
 import os
 import subprocess
+from Server import word_freq
 
 @app.route('/api', methods=['GET'])
 def api():
@@ -33,3 +34,11 @@ def pull():
     response = subprocess.check_output(['git','pull'])
     subprocess.run(['touch', 'htdocs/client.wsgi'])
     return response
+
+@app.route("/frequency", methods=['GET'])
+def frequency():
+    responses = database.get_items()
+    word_freq_dict = word_freq.get_word_freq(responses)
+    return jsonify(word_freq_dict.replace("\"", "'")), 200
+
+

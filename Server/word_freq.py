@@ -1,7 +1,6 @@
 from ast import literal_eval as le
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup as soup
-import json
 
 
 def import_data(url = None):
