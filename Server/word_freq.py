@@ -1,4 +1,4 @@
-import ast
+from ast import literal_eval as le
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup as soup
 import json
@@ -11,7 +11,7 @@ def import_data(url = None):
     webpage = urlopen(req).read()
     page_soup=soup(webpage,"html.parser")
     data = page_soup.get_text()
-    return ast.literal_eval(ast.literal_eval(data))
+    return le(le(data))
 
 
 def get_word_freq(responses):
@@ -35,4 +35,7 @@ def get_word_freq(responses):
     return {k: sorted([e for e in v.items()], reverse = True, key = lambda x: x[1]) for k, v in word_freq.items()}
     
 
-print(get_word_freq(import_data()))
+"""
+How to use:
+word_frequency_dict = get_word_freq(import_data())
+"""
