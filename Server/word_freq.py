@@ -1,24 +1,40 @@
 from ast import literal_eval as le
 from urllib.request import Request, urlopen
 from questions import questions
+from apscheduler.schedulers.background import BackgroundScheduler
+from Server import database
+from datetime import datetime, timedelta
 
-# Direct from database instead of API endpoint
-# def import_data(url = None):
-#     if url is None: ##this is here in case url changes
-#         url = 'http://ec2-54-144-45-173.compute-1.amazonaws.com/api'
-#     req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-#     webpage = urlopen(req).read()
-#     page_soup=soup(webpage,"html.parser")
-#     data = page_soup.get_text()
-#     return le(le(data))
 
 # Fetching data directly from database
 # Getting the latest word frequency
 # Getting the index of last processed response
 # Getting the scheduler running
 
+scheduler = BackgroundScheduler()
+scheduler.start()
 
-def get_word_freq(responses, word_freq = None):
+def time_to_schedule():
+    '''
+    Helper function to get the time when the next batch of scrapping is to be done.
+    :return: time after 10 minutes from now
+    '''
+    return datetime.now() + timedelta(minutes=1)
+
+def schedule_word_freq ():
+    # start scheduler
+    print('the jobs', scheduler.print_jobs())
+    try:
+        scheduler.add_job(store_word_freq, 'date', run_date=time_to_schedule(), id='word_frequency')
+    except:
+        print('looks like already running')
+
+def store_word_freq():
+    responses = database.get_responses()
+    freq = generate_word_freq(responses)
+    database.update_frequencies(freq['combined'])
+
+def generate_word_freq(responses, word_freq = None):
     """
     Optional parameter to pass in an already filled word_freq, that way 
     we can update a word freq with new entries if necessary.

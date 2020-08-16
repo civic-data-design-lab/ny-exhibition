@@ -12,9 +12,7 @@ def api():
     The api endpoint
     :return:
     '''
-
-    responses = database.get_responses()
-    freq = word_freq.get_word_freq(responses)
+    freq = database.get_frequencies()
     # return jsonify(response.replace("\"", "'")), 200
     return freq, 200
 
@@ -23,6 +21,7 @@ def response():
     response = request.form
     print(response)
     id = database.add_response(response['question'], response['response'], response['zip_code'], response['theme'])
+    word_freq.schedule_word_freq()
     return id
 
 @app.route('/')
@@ -34,7 +33,7 @@ def pull():
     os.chdir('/home/ubuntu/ny-exhibition')
     subprocess.run(['git', 'reset', '--hard', 'HEAD'])
     response = subprocess.check_output(['git','pull'])
-    subprocess.run(['touch', 'htdocs/client.wsgi'])
+    # subprocess.run(['touch', '/home/ubuntu/ny-exhibition/client.wsgi'])
     return response
 
 # @app.route("/frequency", methods=['GET'])
