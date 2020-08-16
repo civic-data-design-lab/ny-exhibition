@@ -19,7 +19,7 @@ def time_to_schedule():
     Helper function to get the time when the next batch of scrapping is to be done.
     :return: time after 10 minutes from now
     '''
-    return datetime.now() + timedelta(minutes=1)
+    return datetime.now() + timedelta(minutes=15)
 
 def schedule_word_freq ():
     # start scheduler
