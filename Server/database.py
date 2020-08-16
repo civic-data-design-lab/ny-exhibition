@@ -30,3 +30,6 @@ def add_response (question, response, zip_code, theme):
     new_row = {'question': question, 'response': response, 'zip_code': zip_code, 'theme': theme}
     row_id = collection.insert_one(new_row).inserted_id
     return 'success'
+
+def drop_responses():
+    db.response.drop()
