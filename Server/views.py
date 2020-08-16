@@ -13,14 +13,16 @@ def api():
     :return:
     '''
 
-    response = database.get_items()
-    return jsonify(response.replace("\"", "'")), 200
+    responses = database.get_responses()
+    freq = word_freq.get_word_freq(responses)
+    # return jsonify(response.replace("\"", "'")), 200
+    return freq, 200
 
 @app.route('/response', methods=['POST'])
 def response():
     response = request.form
     print(response)
-    id = database.add_response(response['question'], response['response'], response['zip_code'])
+    id = database.add_response(response['question'], response['response'], response['zip_code'], response['theme'])
     return id
 
 @app.route('/')

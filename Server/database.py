@@ -13,7 +13,7 @@ client = pymongo.MongoClient(
 db = client.exhibition
 
 
-def get_items ():
+def get_responses ():
     '''
     For the API
 
@@ -23,10 +23,10 @@ def get_items ():
     result = []
     for response in responses.find():
         result.append(response)
-    return dumps(result)
+    return result
 
-def add_response (question, response, zip_code):
+def add_response (question, response, zip_code, theme):
     collection = db.response
-    new_row = {'question': question, 'response': response, 'zip_code': zip_code}
+    new_row = {'question': question, 'response': response, 'zip_code': zip_code, 'theme': theme}
     row_id = collection.insert_one(new_row).inserted_id
     return 'success'

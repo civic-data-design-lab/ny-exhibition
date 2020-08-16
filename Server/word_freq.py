@@ -1,16 +1,21 @@
 from ast import literal_eval as le
 from urllib.request import Request, urlopen
-from bs4 import BeautifulSoup as soup
 from questions import questions
 
-def import_data(url = None):
-    if url is None: ##this is here in case url changes
-        url = 'http://ec2-54-144-45-173.compute-1.amazonaws.com/api'
-    req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-    webpage = urlopen(req).read()
-    page_soup=soup(webpage,"html.parser")
-    data = page_soup.get_text()
-    return le(le(data))
+# Direct from database instead of API endpoint
+# def import_data(url = None):
+#     if url is None: ##this is here in case url changes
+#         url = 'http://ec2-54-144-45-173.compute-1.amazonaws.com/api'
+#     req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+#     webpage = urlopen(req).read()
+#     page_soup=soup(webpage,"html.parser")
+#     data = page_soup.get_text()
+#     return le(le(data))
+
+# Fetching data directly from database
+# Getting the latest word frequency
+# Getting the index of last processed response
+# Getting the scheduler running
 
 
 def get_word_freq(responses, word_freq = None):

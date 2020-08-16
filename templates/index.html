@@ -62,11 +62,13 @@
   <div class="container text-center">
     <div class="row flex-column align-items-center justify-content-center" id="questions-container">
       <div class="tab-content" id="nav-tabContent">
-        {% for question in questions %}
+        {% for theme in questions %}
+        {% for question in questions[theme] %}
         <div class="tab-pane fade {{ 'active show' if loop.index == 1 }}" id="question-{{ loop.index }}" role="tabpanel"
           aria-labelledby="list-question-{{ loop.index }}">
           <form class="question" action="/response" method="POST">
             <input type="hidden" value="{{ question }}" name="question" />
+            <input type="hidden" value="{{ theme }}" name="theme" />
             <input type="hidden" class="zip" name="zip_code" />
             <div class="form-group">
               <label for="response-question-{{ loop.index }}" class="col question-label">{{ question + '..' }}</label>
@@ -78,13 +80,16 @@
           </form>
         </div>
         {% endfor %}
+        {% endfor %}
       </div>
       <div class="list-group list-group-horizontal" id="list-tab" role="tablist">
-        {% for question in questions %}
+        {% for theme in questions %}
+        {% for question in questions[theme] %}
         <a class="list-group-item list-group-item-action {{ 'active' if loop.index == 1 }}"
           id="list-question-{{ loop.index }}" data-toggle="list" href="#question-{{ loop.index }}" role="tab"
           aria-controls="question-{{ loop.index }}">Question
           {{ loop.index }}</a>
+        {% endfor %}
         {% endfor %}
       </div>
       <div class="row align-items-center justify-content-center" id="zip-code-container">
