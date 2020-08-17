@@ -36,6 +36,17 @@ def pull():
     subprocess.run(['touch', 'client.wsgi'])
     return response
 
+@app.route("/process")
+def process():
+    '''
+    When you want to force the word frequency to process without having to wait for 15 minutes
+    '''
+    try:
+        word_freq.store_word_freq()
+        return 'success'
+    except:
+        return 'failed'
+
 # @app.route("/frequency", methods=['GET'])
 # def frequency():
 #     responses = database.get_items()
