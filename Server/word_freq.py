@@ -17,13 +17,16 @@ scheduler.start()
 def time_to_schedule():
     '''
     Helper function to get the time when the next batch of scrapping is to be done.
-    :return: time after 10 minutes from now
+    :return: time after 15 minutes from now
     '''
     return datetime.now() + timedelta(minutes=15)
 
 def schedule_word_freq ():
-    # start scheduler
-    print('the jobs', scheduler.print_jobs())
+    '''
+    - After a user submits their response, schedule to process the frequency again after 15 minutes
+    - If there is already a process scheduled to be run, we don't want to schedule another again. 
+      Trying to schedule another one in this case throws an error, which does the job for us
+    '''
     try:
         scheduler.add_job(store_word_freq, 'date', run_date=time_to_schedule(), id='word_frequency')
     except:
@@ -32,7 +35,7 @@ def schedule_word_freq ():
 def store_word_freq():
     responses = database.get_responses()
     freq = generate_word_freq(responses)
-    database.update_frequencies(freq['combined'])
+    database.update_frequencies(freq)
 
 def generate_word_freq(responses, word_freq = None):
     """

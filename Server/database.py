@@ -31,12 +31,12 @@ def get_frequencies ():
 
     :return: List of all the items in response collection in database
     '''
-    words = db.frequencies
+    themes = db.frequencies
     result = {}
     print('getting the frequencies')
-    for word in words.find():
-        print(word)
-        result[word['word']] = word['frequency']
+    for theme in themes.find():
+        print(theme)
+        result[theme['theme']] = theme['words']
     return result
 
 def add_response (question, response, zip_code, theme):
@@ -48,9 +48,12 @@ def add_response (question, response, zip_code, theme):
 def update_frequencies (frequencies):
     collection = db.frequencies
     collection.drop()
-    for word in frequencies:
-        _ = collection.insert_one({'word': word, 'frequency': frequencies[word]}).inserted_id
+    for theme in frequencies:
+        _ = collection.insert_one({'theme': theme, 'words': frequencies[theme]}).inserted_id
     return 'success'
 
 def drop_responses():
     db.response.drop()
+
+def drop_frequencies():
+    db.frequencies.drop()

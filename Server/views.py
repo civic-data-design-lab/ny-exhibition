@@ -33,7 +33,7 @@ def pull():
     os.chdir('/home/ubuntu/ny-exhibition')
     subprocess.run(['git', 'reset', '--hard', 'HEAD'])
     response = subprocess.check_output(['git','pull'])
-    subprocess.run(['touch', '/home/ubuntu/ny-exhibition/client.wsgi'])
+    subprocess.run(['touch', 'client.wsgi'])
     return response
 
 # @app.route("/frequency", methods=['GET'])
