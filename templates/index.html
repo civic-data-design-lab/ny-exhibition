@@ -14,13 +14,13 @@
       /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     }
 
-    #questions-container {
+    #themes-container {
       min-height: 100%;
       max-width: 100%;
     }
 
-    #questions-container .tab-content {
-      padding: 25vh 0 15vh;
+    .questions-container .tab-content {
+      padding: 15vh 0 10vh;
     }
 
     .question-label {
@@ -60,36 +60,64 @@
 <body>
   <!-- The following markup was just copied and pasted from Bootstrap's documentation with modification -->
   <div class="container text-center">
-    <div class="row flex-column align-items-center justify-content-center" id="questions-container">
-      <div class="tab-content" id="nav-tabContent">
+    <div class="row flex-column align-items-center justify-content-around py-5" id="themes-container">
+      <div class="list-group list-group-horizontal pt-5" id="list-tab-theme" role="tablist">
         {% for theme in questions %}
-        {% for question in questions[theme] %}
-        <div class="tab-pane fade {{ 'active show' if loop.index == 1 }}" id="question-{{ loop.index }}" role="tabpanel"
-          aria-labelledby="list-question-{{ loop.index }}">
-          <form class="question" action="/response" method="POST">
-            <input type="hidden" value="{{ question }}" name="question" />
-            <input type="hidden" value="{{ theme }}" name="theme" />
-            <input type="hidden" class="zip" name="zip_code" />
-            <div class="form-group">
-              <label for="response-question-{{ loop.index }}" class="col question-label">{{ question + '..' }}</label>
-              <div class="form-row question-input">
-                <input id="response-question-{{ loop.index }}" class="form-control col" name="response" required />
-                <button type="submit" class="btn btn-outline-light col-auto">Submit</button>
-              </div>
-            </div>
-          </form>
-        </div>
-        {% endfor %}
+        <!-- TAB BUTTON FOR SINGLE THEME -->
+        <a class="list-group-item list-group-item-action {{ 'active' if (loop.index == 1) }}"
+          id="list-theme-{{ loop.index }}" data-toggle="list" href="#theme-{{ loop.index }}" role="tab"
+          aria-controls="theme-{{ loop.index }}">
+          {{ theme }}</a>
+        <!-- TAB BUTTON FOR SINGLE THEME ENDS -->
         {% endfor %}
       </div>
-      <div class="list-group list-group-horizontal" id="list-tab" role="tablist">
+      <div class="tab-content" id="theme-tabContent">
         {% for theme in questions %}
-        {% for question in questions[theme] %}
-        <a class="list-group-item list-group-item-action {{ 'active' if loop.index == 1 }}"
-          id="list-question-{{ loop.index }}" data-toggle="list" href="#question-{{ loop.index }}" role="tab"
-          aria-controls="question-{{ loop.index }}">Question
-          {{ loop.index }}</a>
-        {% endfor %}
+        {% set outer_loop = loop %}
+        <!-- TAB CONTENT FOR A SINGLE THEME -->
+        <div class="tab-pane fade {{ 'active show' if (loop.index == 1) }}" id="theme-{{ loop.index }}" role="tabpanel"
+          aria-labelledby="list-theme-{{ loop.index }}">
+          <div class="row flex-column align-items-center justify-content-center questions-container">
+            <div class="tab-content" id="nav-tabContent">
+              {% for question in questions[theme] %}
+              <!-- TAB CONTENT FOR A SINGLE QUESTION -->
+              <div class="tab-pane fade {{ 'active show' if (loop.index == 1) }}"
+                id="question-{{ loop.index }}-{{ outer_loop.index }}" role="tabpanel"
+                aria-labelledby="list-question-{{ loop.index }}-{{ outer_loop.index }}">
+                <!-- EACH QUESTION HAS A SEPARATE FORM WITH ALL THE INPUTS REQUIRED -->
+                <form class="question" action="/response" method="POST">
+                  <input type="hidden" value="{{ question }}" name="question" />
+                  <input type="hidden" value="{{ theme }}" name="theme" />
+                  <input type="hidden" class="zip" name="zip_code" />
+                  <div class="form-group">
+                    <label for="response-question-{{ loop.index }}-{{ outer_loop.index }}"
+                      class="col question-label">{{ question + '..' }}</label>
+                    <div class="form-row question-input">
+                      <input id="response-question-{{ loop.index }}-{{ outer_loop.index }}" class="form-control col"
+                        name="response" required />
+                      <button type="submit" class="btn btn-outline-light col-auto">Submit</button>
+                    </div>
+                  </div>
+                </form>
+                <!-- SINGLE QUESTION FORM ENDS -->
+              </div>
+              <!-- TAB CONTENT FOR SINGLE QUESTION ENDS -->
+              {% endfor %}
+            </div>
+            <div class="list-group list-group-horizontal" id="list-tab" role="tablist">
+              {% for question in questions[theme] %}
+              <!-- TAB BUTTON FOR SINGLE QUESTION -->
+              <a class="list-group-item list-group-item-action {{ 'active' if (loop.index == 1) }}"
+                id="list-question-{{ loop.index }}-{{ outer_loop.index }}" data-toggle="list"
+                href="#question-{{ loop.index }}-{{ outer_loop.index }}" role="tab"
+                aria-controls="question-{{ loop.index }}-{{ outer_loop.index }}">Question
+                {{ loop.index }}</a>
+              <!-- TAB BUTTON FOR SINGLE QUESTION ENDS -->
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <!-- TAB CONTENT FOR SINGLE THEME ENDS -->
         {% endfor %}
       </div>
       <div class="row align-items-center justify-content-center" id="zip-code-container">
