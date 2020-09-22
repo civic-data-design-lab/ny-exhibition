@@ -34,6 +34,12 @@ def response():
         )
         return response
 
+@app.route('/question', methods=['GET'])
+# Enable CORS for requests from different origins
+@cross_origin()
+def question():
+    return jsonify(questions)
+
 @app.route('/')
 def home():
     return render_template('index.html', questions = questions)
