@@ -1,14 +1,19 @@
+import os
 import pymongo
 from Server import settings as ss
 from bson.json_util import dumps
 from collections import Counter
 
+DATABASE_ADDRESS = os.environ.get('DATABASE_ADDRESS')
+DATABASE_PORT = os.environ.get('DATABASE_PORT')
+DATABASE_ADMIN = os.environ.get('DATABASE_ADMIN')
+DATABASE_PWD = os.environ.get('DATABASE_PWD')
+
 # Connect to mongodb test database
 client = pymongo.MongoClient(
-    host=ss.DATABASE_ADDRESS,
-    port=ss.DATABASE_PORT,
-    username=ss.DATABASE_ADMIN,
-    password=ss.DATABASE_PWD,
+    host=DATABASE_ADDRESS or ss.DATABASE_ADDRESS,
+    port=DATABASE_PORT or ss.DATABASE_PORT,
+    username=DATABASE_ADMIN or ss.DATABASE_ADMIN,    password=DATABASE_PWD or ss.DATABASE_PWD,
     authMechanism='SCRAM-SHA-256')
 db = client.exhibition
 

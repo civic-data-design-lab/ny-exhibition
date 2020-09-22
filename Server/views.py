@@ -1,10 +1,14 @@
 from Server import app
 from flask import request, jsonify, render_template
+from flask_cors import CORS
 from Server import database
 from questions import questions
 import os
 import subprocess
 from Server import word_freq
+
+# Enable CORS for requests from different origins
+CORS(app)
 
 @app.route('/api', methods=['GET'])
 def api():
