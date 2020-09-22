@@ -13,3 +13,20 @@ When the user submits a response from the frontend, it is stored in the database
  - **/api**: Access the word frequencies processed from the responses in JSON format
  - **/pull**: Pulls the latest changes from this github repo and restart the flask server
  - **/process**: Forces the word frequency script to run without having to wait for 15 minutes
+
+
+ ## Installation
+
+Requirements:
+- Python 3
+- MongoDB
+
+Install and activate the virtual environment:
+`$ python3 -m venv venv`
+`$ . venv/bin/activate`
+
+Install dependecies:
+`pip3 install -r requirements.txt`
+
+Run the server:
+`python3 run.py`
