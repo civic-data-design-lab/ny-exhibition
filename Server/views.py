@@ -1,7 +1,8 @@
 from Server import app
-from flask import request, jsonify, render_template
+from flask import request, Response, jsonify, render_template
 from flask_cors import CORS
 from Server import database
+from bson.json_util import dumps
 from questions import questions
 import os
 import subprocess
@@ -20,13 +21,22 @@ def api():
     # return jsonify(response.replace("\"", "'")), 200
     return freq, 200
 
-@app.route('/response', methods=['POST'])
+@app.route('/response', methods=['GET', 'POST'])
 def response():
-    response = request.form
-    print(response)
-    id = database.add_response(response['question'], response['response'], response['zip_code'], response['theme'])
-    word_freq.schedule_word_freq()
-    return id
+    if request.method == 'POST':
+        response = request.form
+        print(response)
+        id = database.add_response(response['question'], response['response'], response['zip_code'], response['theme'])
+        word_freq.schedule_word_freq()
+        return id
+    else:
+        response = Response(
+            dumps(database.get_responses()),
+            status=200,
+            mimetype='application/json'
+        )
+        return response
+
 
 @app.route('/')
 def home():
