@@ -1,15 +1,10 @@
-from Server import app
+from Server import app, database, word_freq
 from flask import request, Response, jsonify, render_template
-from flask_cors import CORS
-from Server import database
+from flask_cors import cross_origin
 from bson.json_util import dumps
 from questions import questions
 import os
 import subprocess
-from Server import word_freq
-
-# Enable CORS for requests from different origins
-CORS(app)
 
 @app.route('/api', methods=['GET'])
 def api():
@@ -22,6 +17,8 @@ def api():
     return freq, 200
 
 @app.route('/response', methods=['GET', 'POST'])
+# Enable CORS for requests from different origins
+@cross_origin()
 def response():
     if request.method == 'POST':
         response = request.form
@@ -36,7 +33,6 @@ def response():
             mimetype='application/json'
         )
         return response
-
 
 @app.route('/')
 def home():
@@ -66,5 +62,3 @@ def process():
 #     responses = database.get_items()
 #     word_freq_dict = word_freq.get_word_freq(responses)
 #     return jsonify(word_freq_dict.replace("\"", "'")), 200
-
-
