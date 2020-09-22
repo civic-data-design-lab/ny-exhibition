@@ -9,11 +9,12 @@ When the user submits a response from the frontend, it is stored in the database
 
 ## Endpoints
  - **/**: The web interface to submit responses
- - **/response**: Accepts `POST` requests from the form in `/` to store them to the database
+ - **/response**:
+  `POST`: add a response to the database
+  `GET`: get all the responses from the database
  - **/api**: Access the word frequencies processed from the responses in JSON format
  - **/pull**: Pulls the latest changes from this github repo and restart the flask server
  - **/process**: Forces the word frequency script to run without having to wait for 15 minutes
-
 
  ## Installation
 
@@ -25,8 +26,8 @@ Install and activate the virtual environment:
 `$ python3 -m venv venv`
 `$ . venv/bin/activate`
 
-Install dependecies:
-`pip3 install -r requirements.txt`
+Install dependencies:
+`$ pip3 install -r requirements.txt`
 
 Run the server:
-`python3 run.py`
+`$ python3 run.py`

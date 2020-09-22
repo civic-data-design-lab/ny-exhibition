@@ -13,7 +13,8 @@ DATABASE_PWD = os.environ.get('DATABASE_PWD')
 client = pymongo.MongoClient(
     host=DATABASE_ADDRESS or ss.DATABASE_ADDRESS,
     port=DATABASE_PORT or ss.DATABASE_PORT,
-    username=DATABASE_ADMIN or ss.DATABASE_ADMIN,    password=DATABASE_PWD or ss.DATABASE_PWD,
+    username=DATABASE_ADMIN or ss.DATABASE_ADMIN,
+    password=DATABASE_PWD or ss.DATABASE_PWD,
     authMechanism='SCRAM-SHA-256')
 db = client.exhibition
 
@@ -25,10 +26,9 @@ def get_responses ():
     :return: List of all the items in response collection in database
     '''
     responses = db.response
-    result = []
-    for response in responses.find():
-        result.append(response)
-    return result
+    cursor = responses.find()
+
+    return list(cursor)
 
 def get_frequencies ():
     '''
