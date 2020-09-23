@@ -10,17 +10,17 @@ When the user submits a response from the frontend, it is stored in the database
 ## Endpoints
  - **/**: The web interface to submit responses
  - **/response**:
-  `POST`: add a response to the database
-  `GET`: get all the responses from the database
+  `POST`: Add a response to the database
+  `GET`: Get all the responses from the database
+ - **/question**: get all the questions
  - **/api**: Access the word frequencies processed from the responses in JSON format
  - **/pull**: Pulls the latest changes from this github repo and restart the flask server
  - **/process**: Forces the word frequency script to run without having to wait for 15 minutes
 
- ## Installation
-
+## Installation
 Requirements:
-- Python 3
-- MongoDB
+- `Python 3`
+- `MongoDB`
 
 Install and activate the virtual environment:
 `$ python3 -m venv venv`
@@ -29,5 +29,6 @@ Install and activate the virtual environment:
 Install dependencies:
 `$ pip3 install -r requirements.txt`
 
+### Usage
 Run the server:
 `$ python3 run.py`
