@@ -51,8 +51,10 @@ def generate_word_freq(responses, word_freq = None):
         toks = {tok for tok in answer.split() if tok not in STOPWORDS}
         for word in toks:
             if word not in word_freq['combined']:
-                word_freq[theme][word] = 0
                 word_freq['combined'][word] = 0
+            
+            if word not in word_freq[theme]:
+                word_freq[theme][word] = 0
             word_freq[theme][word] += 1
             word_freq['combined'][word] +=1
     return word_freq
