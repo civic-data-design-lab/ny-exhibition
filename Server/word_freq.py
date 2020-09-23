@@ -22,7 +22,7 @@ def time_to_schedule():
 def schedule_word_freq ():
     '''
     - After a user submits their response, schedule to process the frequency again after 15 minutes
-    - If there is already a process scheduled to be run, we don't want to schedule another again. 
+    - If there is already a process scheduled to be run, we don't want to schedule another again.
       Trying to schedule another one in this case throws an error, which does the job for us
     '''
     try:
@@ -37,7 +37,7 @@ def store_word_freq():
 
 def generate_word_freq(responses, word_freq = None):
     """
-    Optional parameter to pass in an already filled word_freq, that way 
+    Optional parameter to pass in an already filled word_freq, that way
     we can update a word freq with new entries if necessary.
     """
     if word_freq is None:
@@ -45,6 +45,8 @@ def generate_word_freq(responses, word_freq = None):
         word_freq['combined'] = {}
     for response in responses:
         theme = response['theme']
+        if theme not in word_freq:
+            continue
         answer = response['response'].lower()
         for p in '.,?!/@#$%^&*()-_+':
             answer = answer.replace(p, '')
