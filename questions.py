@@ -1,12 +1,12 @@
 questions = {
   'Evolving Public Realm': [
-    'On NYC streets I would like to see more…  Kim Yao, AIA, Principal, Architecture Research Office',
+    'On NYC streets I would like to see more',
     'One policy/project to make "waste not-want not" a reality for NYC buildings and public spaces would be',
     'By embracing my neighborhood, I’m motivated to',
     'Care includes all that we do to maintain, repair, heal, and sustain our communities and environment. We can best care for our city by'
   ],
   'Climate Change and Resilience': [
-    'Climate resilient buildings are… John Mandyck, CEO Urban Green Council',
+    'Climate resilient buildings are',
     'Design for inclusive urban landscapes is',
     "New York City's 520 miles of coastline can become a continuous public realm and adapt nimbly to rising sea levels by",
     'The design and operation of buildings contributes a majority of NYC’s greenhouse gas emissions.  We can make buildings part of our climate solution by'
