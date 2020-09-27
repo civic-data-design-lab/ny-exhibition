@@ -60,8 +60,12 @@ def process():
     try:
         word_freq.store_word_freq()
         return 'success'
-    except:
-        return 'failed'
+    except Exception as e:
+        return 'failed with exception: %s'%e
+
+@app.route("/most_frequent")
+def most_frequent():
+    return jsonify(database.get_most_frequent())
 
 # @app.route("/frequency", methods=['GET'])
 # def frequency():

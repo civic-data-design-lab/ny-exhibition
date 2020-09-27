@@ -2,6 +2,7 @@ import os
 import pymongo
 from Server import settings as ss
 from bson.json_util import dumps
+from bson.objectid import ObjectId
 from collections import Counter
 
 DATABASE_ADDRESS = os.environ.get('DATABASE_ADDRESS')
@@ -44,6 +45,18 @@ def get_frequencies ():
         result[theme['theme']] = theme['words']
     return result
 
+def get_most_frequent ():
+    most_frequent = db.most_frequent
+    responses = db.response
+    frequent_dict = {}
+    for word in most_frequent.find():
+        frequent_dict[word['word']] = []
+        for doc in word['responses']:
+            print(doc)
+            frequent_dict[word['word']].append(responses.find_one({'_id': ObjectId(doc)}))
+    print('frequent dict', frequent_dict)
+    return dumps(frequent_dict).replace('\"', "'")
+
 def add_response (question, response, zip_code, theme):
     collection = db.response
     new_row = {'question': question, 'response': response, 'zip_code': zip_code, 'theme': theme}
@@ -55,6 +68,24 @@ def update_frequencies (frequencies):
     collection.drop()
     for theme in frequencies:
         _ = collection.insert_one({'theme': theme, 'words': frequencies[theme]}).inserted_id
+    return 'success'
+
+def update_most_frequent(frequencies):
+    frequent = list(frequencies['combined'].items())
+    print('frequent', frequent)
+    frequent.sort(key = lambda x: x[1])
+    frequent_words = {x[0]: [] for x in frequent[:min(10, len(frequent))]}
+
+    responses = db.response
+    most_frequent = db.most_frequent
+    for response in responses.find():
+        for word in frequent_words:
+            if word in response['response'].lower():
+                frequent_words[word].append(response['_id'])
+    
+    for word in frequent_words:
+        _ = most_frequent.insert_one({'word': word, 'responses': frequent_words[word]})
+    
     return 'success'
 
 def drop_responses():

@@ -34,6 +34,7 @@ def store_word_freq():
     responses = database.get_responses()
     freq = generate_word_freq(responses)
     database.update_frequencies(freq)
+    database.update_most_frequent(freq)
 
 def generate_word_freq(responses, word_freq = None):
     """
