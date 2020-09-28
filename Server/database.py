@@ -55,7 +55,7 @@ def get_most_frequent ():
             print(doc)
             frequent_dict[word['word']].append(responses.find_one({'_id': ObjectId(doc)}))
     print('frequent dict', frequent_dict)
-    return dumps(frequent_dict).replace('\"', "'")
+    return frequent_dict
 
 def add_response (question, response, zip_code, theme):
     collection = db.response
