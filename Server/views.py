@@ -72,7 +72,12 @@ def question():
 
 @app.route('/')
 def home():
-    return render_template('index.html', questions = questions)
+    themes = {}
+    for question in questions:
+        if question['theme_id'] not in themes:
+            themes[question['theme_id']] = []
+        themes[question['theme_id']].append(question['prompt'])
+    return render_template('index.html', questions = themes)
 
 @app.route("/pull")
 def pull():
