@@ -29,10 +29,21 @@ def response():
     else:
         arguments = request.args
         db_responses = database.get_responses()
-        if 'threshold' in arguments:
-            pass
+        n_responses = len(db_responses)
+        print("responses", n_responses)
+        grouped = False
         if 'groupby' in arguments:
-            db_responses = sorted(db_responses, key = lambda x: x[arguments['groupby']])
+            grouped = True
+            grouped = {}
+            groupby = arguments['groupby']
+            for response in db_responses:
+                if response[groupby] not in grouped:
+                    grouped[response[groupby]] = []
+                grouped[response[groupby]].append(response)
+            db_responses = grouped
+        
+        # if 'threshold' in arguments:
+        #     if grouped
         response = Response(
             dumps(db_responses),
             status=200,
