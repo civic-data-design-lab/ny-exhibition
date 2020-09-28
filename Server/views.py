@@ -27,8 +27,14 @@ def response():
         word_freq.schedule_word_freq()
         return id
     else:
+        arguments = request.args
+        db_responses = database.get_responses()
+        if 'threshold' in arguments:
+            pass
+        if 'groupby' in arguments:
+            db_responses = sorted(db_responses, key = lambda x: x[arguments['groupby']])
         response = Response(
-            dumps(database.get_responses()),
+            dumps(db_responses),
             status=200,
             mimetype='application/json'
         )
