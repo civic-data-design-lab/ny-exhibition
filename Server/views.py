@@ -2,7 +2,6 @@ from Server import app, database, word_freq
 from flask import request, Response, jsonify, render_template
 from flask_cors import cross_origin
 from bson.json_util import dumps
-from questions import questions
 from json import loads
 import os
 import subprocess
@@ -42,6 +41,7 @@ def response():
             if groupby == 'word_freq':
                 db_responses = database.get_most_frequent()
             else:
+                if groupby == 'theme_id': groupby = 'theme'
                 for response in db_responses:
                     if response[groupby] not in grouped:
                         grouped[response[groupby]] = []
@@ -72,12 +72,8 @@ def question():
 
 @app.route('/')
 def home():
-    themes = {}
-    for question in questions:
-        if question['theme_id'] not in themes:
-            themes[question['theme_id']] = []
-        themes[question['theme_id']].append(question['prompt'])
-    return render_template('index.html', questions = themes)
+    questions = word_freq.get_questions()
+    return render_template('index.html', questions = questions)
 
 @app.route("/pull")
 def pull():

@@ -12,6 +12,14 @@ from stopwords import STOPWORDS
 scheduler = BackgroundScheduler()
 scheduler.start()
 
+def get_questions ():
+    themes = {}
+    for question in questions:
+        if question['theme_id'] not in themes:
+            themes[question['theme_id']] = []
+        themes[question['theme_id']].append(question['prompt'])
+    return themes
+
 def time_to_schedule():
     '''
     Helper function to get the time when the next batch of scrapping is to be done.
@@ -42,7 +50,7 @@ def generate_word_freq(responses, word_freq = None):
     we can update a word freq with new entries if necessary.
     """
     if word_freq is None:
-        word_freq = {key: {} for key in questions}
+        word_freq = {key: {} for key in get_questions()}
         word_freq['combined'] = {}
     for response in responses:
         theme = response['theme']
