@@ -3,6 +3,7 @@ from flask import request, Response, jsonify, render_template
 from flask_cors import cross_origin
 from bson.json_util import dumps
 from questions import questions
+from json import loads
 import os
 import subprocess
 
@@ -33,14 +34,19 @@ def response():
         print("responses", n_responses)
         grouped_ = False
         if 'groupby' in arguments:
+            groupby = arguments['groupby']
+            if groupby not in ['zip_code', 'theme_id', 'word_freq']:
+                return "Groupby %s not allowed" % groupby, 400
             grouped_ = True
             grouped = {}
-            groupby = arguments['groupby']
-            for response in db_responses:
-                if response[groupby] not in grouped:
-                    grouped[response[groupby]] = []
-                grouped[response[groupby]].append(response)
-            db_responses = grouped
+            if groupby == 'word_freq':
+                db_responses = database.get_most_frequent()
+            else:
+                for response in db_responses:
+                    if response[groupby] not in grouped:
+                        grouped[response[groupby]] = []
+                    grouped[response[groupby]].append(response)
+                db_responses = grouped
         
         if 'threshold' in arguments:
             threshold = int(arguments['threshold'])
@@ -89,7 +95,7 @@ def process():
 
 @app.route("/most_frequent")
 def most_frequent():
-    return jsonify(database.get_most_frequent())
+    return jsonify(dumps(database.get_most_frequent()).replace('\"', "'"))
 
 # @app.route("/frequency", methods=['GET'])
 # def frequency():
