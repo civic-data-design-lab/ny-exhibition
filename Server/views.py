@@ -68,7 +68,7 @@ def response():
 # Enable CORS for requests from different origins
 @cross_origin()
 def question():
-    return jsonify(questions)
+    return jsonify(word_freq.get_questions())
 
 @app.route('/')
 def home():
