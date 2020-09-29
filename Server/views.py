@@ -5,6 +5,7 @@ from bson.json_util import dumps
 from json import loads
 import os
 import subprocess
+from questions import questions
 
 @app.route('/api', methods=['GET'])
 def api():
@@ -68,7 +69,7 @@ def response():
 # Enable CORS for requests from different origins
 @cross_origin()
 def question():
-    return jsonify(word_freq.get_questions())
+    return jsonify(questions)
 
 @app.route('/')
 def home():
