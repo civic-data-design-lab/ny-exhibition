@@ -2,7 +2,7 @@ from Server import app, database, word_freq
 from flask import request, Response, jsonify, render_template
 from flask_cors import cross_origin
 from bson.json_util import dumps
-from questions import questions
+from json import loads
 import os
 import subprocess
 
@@ -27,8 +27,38 @@ def response():
         word_freq.schedule_word_freq()
         return id
     else:
+        arguments = request.args
+        db_responses = database.get_responses()
+        n_responses = len(db_responses)
+        print("responses", n_responses)
+        grouped_ = False
+        if 'groupby' in arguments:
+            groupby = arguments['groupby']
+            if groupby not in ['zip_code', 'theme_id', 'word_freq']:
+                return "Groupby %s not allowed" % groupby, 400
+            grouped_ = True
+            grouped = {}
+            if groupby == 'word_freq':
+                db_responses = database.get_most_frequent()
+            else:
+                if groupby == 'theme_id': groupby = 'theme'
+                for response in db_responses:
+                    if response[groupby] not in grouped:
+                        grouped[response[groupby]] = []
+                    grouped[response[groupby]].append(response)
+                db_responses = grouped
+        
+        if 'threshold' in arguments:
+            threshold = int(arguments['threshold'])
+            if grouped_:
+                for key in db_responses:
+                    factor = len(db_responses[key]) / n_responses
+                    print('factor', factor)
+                    db_responses[key] = db_responses[key][:round(threshold * factor)+1]
+            else:
+                db_responses = db_responses[:threshold]
         response = Response(
-            dumps(database.get_responses()),
+            dumps(db_responses),
             status=200,
             mimetype='application/json'
         )
@@ -42,6 +72,7 @@ def question():
 
 @app.route('/')
 def home():
+    questions = word_freq.get_questions()
     return render_template('index.html', questions = questions)
 
 @app.route("/pull")
@@ -60,8 +91,12 @@ def process():
     try:
         word_freq.store_word_freq()
         return 'success'
-    except:
-        return 'failed'
+    except Exception as e:
+        return 'failed with exception: %s'%e
+
+@app.route("/most_frequent")
+def most_frequent():
+    return jsonify(dumps(database.get_most_frequent()).replace('\"', "'"))
 
 # @app.route("/frequency", methods=['GET'])
 # def frequency():

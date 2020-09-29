@@ -12,6 +12,14 @@ from stopwords import STOPWORDS
 scheduler = BackgroundScheduler()
 scheduler.start()
 
+def get_questions ():
+    themes = {}
+    for question in questions:
+        if question['theme_id'] not in themes:
+            themes[question['theme_id']] = []
+        themes[question['theme_id']].append(question['prompt'])
+    return themes
+
 def time_to_schedule():
     '''
     Helper function to get the time when the next batch of scrapping is to be done.
@@ -22,7 +30,7 @@ def time_to_schedule():
 def schedule_word_freq ():
     '''
     - After a user submits their response, schedule to process the frequency again after 15 minutes
-    - If there is already a process scheduled to be run, we don't want to schedule another again. 
+    - If there is already a process scheduled to be run, we don't want to schedule another again.
       Trying to schedule another one in this case throws an error, which does the job for us
     '''
     try:
@@ -34,25 +42,30 @@ def store_word_freq():
     responses = database.get_responses()
     freq = generate_word_freq(responses)
     database.update_frequencies(freq)
+    database.update_most_frequent(freq)
 
 def generate_word_freq(responses, word_freq = None):
     """
-    Optional parameter to pass in an already filled word_freq, that way 
+    Optional parameter to pass in an already filled word_freq, that way
     we can update a word freq with new entries if necessary.
     """
     if word_freq is None:
-        word_freq = {key: {} for key in questions}
+        word_freq = {key: {} for key in get_questions()}
         word_freq['combined'] = {}
     for response in responses:
         theme = response['theme']
+        if theme not in word_freq:
+            continue
         answer = response['response'].lower()
         for p in '.,?!/@#$%^&*()-_+':
             answer = answer.replace(p, '')
         toks = {tok for tok in answer.split() if tok not in STOPWORDS}
         for word in toks:
             if word not in word_freq['combined']:
-                word_freq[theme][word] = 0
                 word_freq['combined'][word] = 0
+            
+            if word not in word_freq[theme]:
+                word_freq[theme][word] = 0
             word_freq[theme][word] += 1
             word_freq['combined'][word] +=1
     return word_freq
