@@ -61,7 +61,7 @@ def add_response (question, response, zip_code, theme):
     collection = db.response
     new_row = {'question': question, 'response': response, 'zip_code': zip_code, 'theme': theme}
     row_id = collection.insert_one(new_row).inserted_id
-    return 'success'
+    return str(row_id)
 
 def update_frequencies (frequencies):
     collection = db.frequencies
@@ -82,10 +82,10 @@ def update_most_frequent(frequencies):
         for word in frequent_words:
             if word in response['response'].lower():
                 frequent_words[word].append(response['_id'])
-    
+
     for word in frequent_words:
         _ = most_frequent.insert_one({'word': word, 'responses': frequent_words[word]})
-    
+
     return 'success'
 
 def drop_responses():
