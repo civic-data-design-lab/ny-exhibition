@@ -1,7 +1,10 @@
 venv/
 __pycache__/
 
+Client/build.tar.gz
+
 static/og_image_*
+static/build
 
 .vscode
 

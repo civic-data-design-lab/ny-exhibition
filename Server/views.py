@@ -8,6 +8,13 @@ import subprocess
 from questions import questions
 from social import generate_image
 import urllib.parse
+from get_app_build import get_app_build
+
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    return app.send_static_file("build/index.html")
 
 @app.route('/api', methods=['GET'])
 def api():
@@ -77,8 +84,8 @@ def response():
 def question():
     return jsonify(questions)
 
-@app.route('/')
-def home():
+@app.route('/form')
+def form():
     questions = word_freq.get_questions()
     return render_template('index.html', questions = questions)
 
@@ -89,6 +96,11 @@ def pull():
     response = subprocess.check_output(['git','pull'])
     subprocess.run(['touch', 'client.wsgi'])
     return response
+
+@app.route("/pull_app")
+def pull_app():
+    get_app_build()
+    return 'done'
 
 @app.route("/process")
 def process():
