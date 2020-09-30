@@ -6,15 +6,15 @@ from boroughs import boroughs
 
 dir = os.path.dirname(__file__)
 
-W, H = (640, 400)
+W, H = (1200, 630)
 
 font_path = os.path.join(dir, "assets", "Graphik-Bold.ttf")
 font_color = "#ffffff"
-font_size = 40
+font_size = 64
 
-text_margin = 20
+text_margin = 40
 text_wrap = 32
-line_height = 8
+line_height = 12
 
 image_prefix = "og_image"
 
