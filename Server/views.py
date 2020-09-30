@@ -42,14 +42,13 @@ def response():
         grouped_ = False
         if 'groupby' in arguments:
             groupby = arguments['groupby']
-            if groupby not in ['zip_code', 'theme_id', 'word_freq']:
+            if groupby not in ['zip_code', 'theme', 'word_freq']:
                 return "Groupby %s not allowed" % groupby, 400
             grouped_ = True
             grouped = {}
             if groupby == 'word_freq':
                 db_responses = database.get_most_frequent()
             else:
-                if groupby == 'theme_id': groupby = 'theme'
                 for response in db_responses:
                     if response[groupby] not in grouped:
                         grouped[response[groupby]] = []

@@ -13,11 +13,14 @@ scheduler = BackgroundScheduler()
 scheduler.start()
 
 def get_questions ():
+    '''
+    Just so that we don't have to change the current front end 
+    '''
     themes = {}
     for question in questions:
-        if question['theme_id'] not in themes:
-            themes[question['theme_id']] = []
-        themes[question['theme_id']].append(question['prompt'])
+        if question['theme'] not in themes:
+            themes[question['theme']] = []
+        themes[question['theme']].append(question['prompt'])
     return themes
 
 def time_to_schedule():
