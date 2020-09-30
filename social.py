@@ -38,7 +38,7 @@ def generate_image(images_dir, id, text, theme, zip_code):
         draw.line((lx, ly, lx + text_width, ly), fill=font_color, width=int(line_height / 2))
 
     # Draw borough text
-    if zip_code:
+    if bool(zip_code):
         borough = find_borough(zip_code)
         draw.text((margin, H - text_height - text_margin),
                 borough, font=font, fill=font_color)
