@@ -16,6 +16,7 @@ text_margin = 40
 text_wrap = 32
 line_height = 12
 
+text_limit = 120
 image_prefix = "og_image"
 
 def generate_image(images_dir, id, text, theme, zip_code):
@@ -24,6 +25,8 @@ def generate_image(images_dir, id, text, theme, zip_code):
     draw.fontmode = "0"
     margin = offset = text_margin
     font = ImageFont.truetype(font_path, font_size)
+
+    text = (text[:text_limit] + '...') if len(text) > text_limit else text
 
     for line in textwrap.wrap(text, width=text_wrap):
         # Draw response text
