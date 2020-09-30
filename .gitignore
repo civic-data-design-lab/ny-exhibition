@@ -1,2 +1,7 @@
 venv/
 __pycache__/
+
+static/og_image_*
+
+.vscode
+.DS_Store
