@@ -93,3 +93,12 @@ def drop_responses():
 
 def drop_frequencies():
     db.frequencies.drop()
+
+def delete_responses(ids):
+    responses = db.response
+    try:
+        for id in ids:
+            responses.remove(ObjectId(id))
+        return 'success'
+    except Exception as e:
+        return 'error', e
