@@ -1,10 +1,13 @@
-from Server import app, database, word_freq
-from flask import request, Response, jsonify, render_template
+from Server import app, database, word_freq, static_path
+from flask import request, Response, jsonify, render_template, url_for
 from flask_cors import cross_origin
 from bson.json_util import dumps
 from json import loads
 import os
 import subprocess
+from questions import questions
+from social import generate_image
+import urllib.parse
 
 @app.route('/api', methods=['GET'])
 def api():
@@ -22,10 +25,15 @@ def api():
 def response():
     if request.method == 'POST':
         response = request.form
-        print(response)
         id = database.add_response(response['question'], response['response'], response['zip_code'], response['theme'])
         word_freq.schedule_word_freq()
-        return id
+        # Dinamically generate Open Graph images
+        og_image_name = generate_image(static_path, id, response['response'],
+                       response['theme'], response['zip_code'])
+        og_image_path = urllib.parse.urljoin(
+            request.url_root, url_for('static', filename=og_image_name))
+
+        return jsonify({"id": id, "og_image": og_image_path})
     else:
         arguments = request.args
         db_responses = database.get_responses()
@@ -47,7 +55,7 @@ def response():
                         grouped[response[groupby]] = []
                     grouped[response[groupby]].append(response)
                 db_responses = grouped
-        
+
         if 'threshold' in arguments:
             threshold = int(arguments['threshold'])
             if grouped_:
