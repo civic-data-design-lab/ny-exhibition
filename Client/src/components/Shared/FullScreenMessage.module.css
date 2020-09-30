@@ -1,0 +1,14 @@
+@value typography: '../../styles/typography.module.css';
+@value n1 from typography;
+
+.wrapper {
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.centered {
+  composes: n1;
+  margin: auto;
+}

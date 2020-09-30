@@ -1,0 +1,34 @@
+@value utils: '../../styles/utils.module.css';
+@value thickBorder, smallHeight, minSmallHeight from utils;
+
+.logo {
+  color: inherit;
+  text-decoration: none;
+}
+
+.logo img {
+  display: block;
+}
+
+@media only screen and (max-width: 768px) {
+}
+
+@media only screen and (min-width: 769px) {
+  .footer {
+    height: smallHeight;
+    min-height: minSmallHeight;
+    background: white;
+    padding: 11px 10px;
+    composes: thickBorder;
+  }
+
+  .logo {
+    display: inline-block;
+    margin-right: 60px;
+    height: 100%;
+  }
+
+  .logo img {
+    height: 100%;
+  }
+}

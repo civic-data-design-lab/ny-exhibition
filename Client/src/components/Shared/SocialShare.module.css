@@ -1,0 +1,22 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.link {
+  position: relative;
+  transform: translate(0, -5px);
+  margin: 0 2px;
+  padding: 5px;
+  transition: 0.3s transform ease-in-out;
+}
+
+.link:hover {
+  transform: translate(0, -5px) scale(1.2);
+}
+
+.link,
+.link svg {
+  width: 18px;
+  height: 18px;
+}

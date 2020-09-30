@@ -1,0 +1,31 @@
+@value utils: '../../styles/utils.module.css';
+@value typography: '../../styles/typography.module.css';
+@value thickBorder from utils;
+@value n1 from typography;
+
+@media only screen and (max-width: 768px) {
+  .hoveredNavItemDescr {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: 769px) {
+  .hoveredNavItemDescr {
+    composes: thickBorder;
+    background: white;
+    padding: 52px 12px 20px;
+    position: absolute;
+    top: -4px;
+    left: 0;
+    width: calc(100% + 4px);
+    pointer-events: none;
+    z-index: 4;
+    opacity: 0;
+    transition: 0.3s opacity ease-in-out;
+    composes: n1;
+  }
+
+  .hoveredNavItemDescrIsVisible {
+    opacity: 1;
+  }
+}

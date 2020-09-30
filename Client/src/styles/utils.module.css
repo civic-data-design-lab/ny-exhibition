@@ -1,0 +1,51 @@
+@value smallHeight: 6.25%;
+@value minSmallHeight: 54px;
+@value bigHeight: 87.5%;
+@value maxBigHeight: calc(100% - 108px);
+
+.resetBtn {
+  background: transparent;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  /* text-align: left; */
+  /* outline: 1px solid transparent; */
+  cursor: pointer;
+  color: inherit;
+}
+
+.resetList {
+  padding-left: 0;
+  list-style: none;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.resetLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.thickBorder {
+  border: 3px solid black;
+}
+
+/*
+ * Question
+ */
+/* See:
+ * 1. https://www.coolfields.co.uk/2011/04/accessible-forms-should-every-input-have-a-label/ 
+ * 2. https://www.coolfields.co.uk/2016/05/text-for-screen-readers-only-updated/
+ */
+.screenreaderOnly {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  width: 1px;
+  overflow: hidden;
+  position: absolute !important;
+  word-wrap: normal !important;
+}

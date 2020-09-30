@@ -1,0 +1,10 @@
+.wrapper {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.packsWrapper {
+  min-height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
