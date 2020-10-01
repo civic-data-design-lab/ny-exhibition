@@ -71,9 +71,9 @@ def update_frequencies (frequencies):
 
 def update_most_frequent(frequencies):
     frequent = list(frequencies['combined'].items())
-    print('updating most frequent', frequent)
+    print('frequent', frequent)
     frequent.sort(key = lambda x: x[1])
-    frequent_words = {x[0]: [] for x in frequent}
+    frequent_words = {x[0]: [] for x in frequent[:min(20, len(frequent))]}
 
     responses = db.response
     most_frequent = db.most_frequent
