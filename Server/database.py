@@ -1,9 +1,11 @@
 import os
 import pymongo
 from Server import settings as ss
+from Server import static_path
 from bson.json_util import dumps
 from bson.objectid import ObjectId
 from collections import Counter
+import social
 
 DATABASE_ADDRESS = os.environ.get('DATABASE_ADDRESS')
 DATABASE_PORT = os.environ.get('DATABASE_PORT')
@@ -41,7 +43,6 @@ def get_frequencies ():
     result = {}
     print('getting the frequencies')
     for theme in themes.find():
-        print(theme)
         result[theme['theme']] = theme['words']
     return result
 
@@ -52,9 +53,7 @@ def get_most_frequent ():
     for word in most_frequent.find():
         frequent_dict[word['word']] = []
         for doc in word['responses']:
-            print(doc)
             frequent_dict[word['word']].append(responses.find_one({'_id': ObjectId(doc)}))
-    print('frequent dict', frequent_dict)
     return frequent_dict
 
 def add_response (question, response, zip_code, theme):
@@ -72,9 +71,9 @@ def update_frequencies (frequencies):
 
 def update_most_frequent(frequencies):
     frequent = list(frequencies['combined'].items())
-    print('frequent', frequent)
+    print('updating most frequent', frequent)
     frequent.sort(key = lambda x: x[1])
-    frequent_words = {x[0]: [] for x in frequent[:min(10, len(frequent))]}
+    frequent_words = {x[0]: [] for x in frequent}
 
     responses = db.response
     most_frequent = db.most_frequent
@@ -102,3 +101,10 @@ def delete_responses(ids):
         return 'success'
     except Exception as e:
         return 'error', e
+
+def make_og_image_for_all():
+    responses = db.response
+    for response in responses.find():
+        social.generate_image(static_path, str(response['_id']), response['response'],
+                       response['theme'], response['zip_code'])
+    return 'success'

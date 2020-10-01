@@ -38,7 +38,6 @@ def response():
         arguments = request.args
         db_responses = database.get_responses()
         n_responses = len(db_responses)
-        print("responses", n_responses)
         grouped_ = False
         if 'groupby' in arguments:
             groupby = arguments['groupby']
@@ -60,7 +59,6 @@ def response():
             if grouped_:
                 for key in db_responses:
                     factor = len(db_responses[key]) / n_responses
-                    print('factor', factor)
                     db_responses[key] = db_responses[key][:round(threshold * factor)+1]
             else:
                 db_responses = db_responses[:threshold]
