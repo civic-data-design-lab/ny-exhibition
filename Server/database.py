@@ -77,7 +77,7 @@ def update_most_frequent(frequencies):
     print('length of frequent', len(frequent))
     frequent_words = {x[0]: [] for x in frequent[:min(20, len(frequent))]}
     print('length of frequent_words', len(frequent_words))
-    
+
     responses = db.response
     most_frequent = db.most_frequent
     for response in responses.find():
@@ -95,6 +95,9 @@ def drop_responses():
 
 def drop_frequencies():
     db.frequencies.drop()
+
+def drop_most_frequent():
+    db.most_frequent.drop()
 
 def delete_responses(ids):
     responses = db.response
