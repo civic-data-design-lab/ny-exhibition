@@ -14,10 +14,36 @@ font_size = 64
 
 text_margin = 40
 text_wrap = 32
-line_height = 12
+line_height = 20
 
 text_limit = 120
 image_prefix = "og_image"
+
+
+def draw_text(text, zip_code, limit, margin, offset, draw, font):
+    #text = (text[:text_limit] + '...') if len(text) > text_limit else text
+    print(text)
+
+    for line in textwrap.wrap(text, width=limit):
+        # Draw response text
+        text_width, text_height = draw.textsize(line, font=font)
+
+        if text_width > (W - margin):
+            limit = limit - 1
+            draw_text(text, zip_code, limit, margin, offset, draw, font)
+        else:
+            draw.text((margin, offset), line, font=font, fill=font_color)
+            offset += font.getsize(line)[1] + line_height
+            # Draw response text underline
+            lx, ly = margin, offset - (line_height / 2)
+            draw.line((lx, ly, lx + text_width, ly),
+                      fill=font_color, width=8)
+
+            # Draw borough text
+            if zip_code:
+                borough = find_borough(zip_code)
+                draw.text((margin, H - text_height - text_margin),
+                        borough, font=font, fill=font_color)
 
 def generate_image(images_dir, id, text, theme, zip_code):
     im = Image.new("RGBA", (W, H), themes[theme])
@@ -26,22 +52,7 @@ def generate_image(images_dir, id, text, theme, zip_code):
     margin = offset = text_margin
     font = ImageFont.truetype(font_path, font_size)
 
-    text = (text[:text_limit] + '...') if len(text) > text_limit else text
-
-    for line in textwrap.wrap(text, width=text_wrap):
-        # Draw response text
-        text_width, text_height = draw.textsize(line, font=font)
-        draw.text((margin, offset), line, font=font, fill=font_color)
-        offset += font.getsize(line)[1] + line_height
-        # Draw response text underline
-        lx, ly = margin, offset - (line_height / 2)
-        draw.line((lx, ly, lx + text_width, ly), fill=font_color, width=int(line_height / 2))
-
-    # Draw borough text
-    if zip_code:
-        borough = find_borough(zip_code)
-        draw.text((margin, H - text_height - text_margin),
-                borough, font=font, fill=font_color)
+    draw_text(text, zip_code, text_wrap, margin, offset, draw, font)
 
     image_name = image_prefix + "_" + id + ".png"
 
