@@ -70,6 +70,7 @@ def update_frequencies (frequencies):
     return 'success'
 
 def update_most_frequent(frequencies):
+    drop_most_frequent()
     frequent = list(frequencies['combined'].items())
     print('frequent', frequent)
     frequent.sort(key = lambda x: x[1], reverse=True)
