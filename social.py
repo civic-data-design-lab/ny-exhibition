@@ -13,7 +13,7 @@ font_color = "#ffffff"
 font_size = 64
 
 text_margin = 40
-text_wrap = 32
+text_wrap = 30
 line_height = 20
 
 text_limit = 120
