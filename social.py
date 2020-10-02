@@ -19,43 +19,47 @@ line_height = 20
 text_limit = 120
 image_prefix = "og_image"
 
+def draw_text(text, zip_code, wrap_limit, text_margin, max_width, draw):
+    margin = offset = text_margin
+    font = ImageFont.truetype(font_path, font_size)
+    lines = textwrap.wrap(text, width=wrap_limit)
 
-def draw_text(text, zip_code, limit, margin, offset, draw, font):
-    #text = (text[:text_limit] + '...') if len(text) > text_limit else text
-    print(text)
-
-    for line in textwrap.wrap(text, width=limit):
-        # Draw response text
+    for line in lines:
         text_width, text_height = draw.textsize(line, font=font)
 
-        if text_width > (W - margin):
-            limit = limit - 1
-            draw_text(text, zip_code, limit, margin, offset, draw, font)
+        if text_width > (max_width - margin):
+            wrap_limit = wrap_limit - 1
+            draw_text(text, zip_code, wrap_limit,
+                      margin, max_width, draw)
+            break
         else:
             draw.text((margin, offset), line, font=font, fill=font_color)
             offset += font.getsize(line)[1] + line_height
+
             # Draw response text underline
             lx, ly = margin, offset - (line_height / 2)
             draw.line((lx, ly, lx + text_width, ly),
                       fill=font_color, width=8)
 
-            # Draw borough text
-            if zip_code:
-                borough = find_borough(zip_code)
-                draw.text((margin, H - text_height - text_margin),
-                        borough, font=font, fill=font_color)
+    # Draw borough text
+    if zip_code:
+        borough = find_borough(zip_code)
+        draw.text((margin, H - text_height - text_margin),
+                borough, font=font, fill=font_color)
 
 def generate_image(images_dir, id, text, theme, zip_code):
     im = Image.new("RGBA", (W, H), themes[theme])
     draw = ImageDraw.Draw(im)
     draw.fontmode = "0"
-    margin = offset = text_margin
-    font = ImageFont.truetype(font_path, font_size)
 
-    draw_text(text, zip_code, text_wrap, margin, offset, draw, font)
+    # Truncate text to a limit
+    text = (text[:text_limit] + '...') if len(text) > text_limit else text
 
+    # Draw text
+    draw_text(text, zip_code, text_wrap, text_margin, W, draw)
+
+    # Save image
     image_name = image_prefix + "_" + id + ".png"
-
     im.save(os.path.join(dir, images_dir, image_name), "PNG")
 
     return image_name
