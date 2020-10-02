@@ -19,7 +19,7 @@ line_height = 20
 text_limit = 120
 image_prefix = "og_image"
 
-def draw_text(text, zip_code, wrap_limit, text_margin, max_width, draw):
+def draw_text(text, zip_code, wrap_limit, text_margin, max_width, max_height, draw):
     margin = offset = text_margin
     font = ImageFont.truetype(font_path, font_size)
     lines = textwrap.wrap(text, width=wrap_limit)
@@ -30,7 +30,7 @@ def draw_text(text, zip_code, wrap_limit, text_margin, max_width, draw):
         if text_width > (max_width - (margin * 2)):
             wrap_limit = wrap_limit - 1
             draw_text(text, zip_code, wrap_limit,
-                      margin, max_width, draw)
+                      margin, max_width, max_height, draw)
             break
         else:
             draw.text((margin, offset), line, font=font, fill=font_color)
@@ -44,7 +44,7 @@ def draw_text(text, zip_code, wrap_limit, text_margin, max_width, draw):
     # Draw borough text
     if zip_code:
         borough = find_borough(zip_code)
-        draw.text((margin, H - text_height - text_margin),
+        draw.text((margin, max_height - text_height - text_margin),
                 borough, font=font, fill=font_color)
 
 def generate_image(images_dir, id, text, theme, zip_code):
@@ -56,7 +56,7 @@ def generate_image(images_dir, id, text, theme, zip_code):
     text = (text[:text_limit] + '...') if len(text) > text_limit else text
 
     # Draw text
-    draw_text(text, zip_code, text_wrap, text_margin, W, draw)
+    draw_text(text, zip_code, text_wrap, text_margin, W, H, draw)
 
     # Save image
     image_name = image_prefix + "_" + id + ".png"
