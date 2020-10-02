@@ -27,7 +27,7 @@ def draw_text(text, zip_code, wrap_limit, text_margin, max_width, draw):
     for line in lines:
         text_width, text_height = draw.textsize(line, font=font)
 
-        if text_width > (max_width - margin):
+        if text_width > (max_width - (margin * 2)):
             wrap_limit = wrap_limit - 1
             draw_text(text, zip_code, wrap_limit,
                       margin, max_width, draw)
