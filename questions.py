@@ -77,7 +77,7 @@ questions = [
   },
   {
    'theme': 'Public Health',
-   'prompt':'The pandemic and social and racial unrest amplified the importance of the public realm in New York, we can apply these lesson to our future city by',
+   'prompt':'The pandemic and social and racial unrest amplified the importance of the public realm in New York. We can apply these lesson to our future city by',
   'author': 'Purnima Kapur',
   'role': 'Planning Consultant and Urbanist'
   },
