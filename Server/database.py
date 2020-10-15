@@ -6,6 +6,7 @@ from bson.json_util import dumps
 from bson.objectid import ObjectId
 from collections import Counter
 import social
+from questions import questions
 
 DATABASE_ADDRESS = os.environ.get('DATABASE_ADDRESS')
 DATABASE_PORT = os.environ.get('DATABASE_PORT')
@@ -115,3 +116,10 @@ def make_og_image_for_all():
         social.generate_image(static_path, str(response['_id']), response['response'],
                        response['theme'], response['zip_code'])
     return 'success'
+
+
+def update_responses():
+    q_list = set(q['prompt'] for q in questions)
+    for response in get_responses():
+        if response['question'] not in q_list:
+            print('question not found: ', response['question'])
