@@ -7,6 +7,7 @@ from bson.objectid import ObjectId
 from collections import Counter
 import social
 from questions import questions
+from corrections import corrections
 
 DATABASE_ADDRESS = os.environ.get('DATABASE_ADDRESS')
 DATABASE_PORT = os.environ.get('DATABASE_PORT')
@@ -119,7 +120,13 @@ def make_og_image_for_all():
 
 
 def update_responses():
+    responses = db.response
     q_list = set(q['prompt'] for q in questions)
     for response in get_responses():
         if response['question'] not in q_list:
+            id = response['_id']
+            new_question = corrections[response['question']]
+            if new_question:
+                responses.update_one({'_id': id}, {'$set': {'question': new_question}})
+                print('updated')
             print('question not found: ', response['question'])
